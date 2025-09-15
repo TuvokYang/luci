@@ -1819,7 +1819,7 @@ return view.extend({
 						const eo = this.section.children.filter(function(o) { return o.option == 'eap_type'; })[0];
 						const ev = eo.formvalue(section_id);
 
-						if (ev != 'ttls' && (value == 'PAP' || value == 'CHAP' || value == 'MSCHAP' || value == 'MSCHAPV2'))
+						if (ev != 'ttls' && (value == 'PAP' || value == 'CHAP' || value == 'MSCHAP'))
 							return _('This authentication type is not applicable to the selected EAP method.');
 
 						return true;
@@ -2100,8 +2100,8 @@ return view.extend({
 			const zoneval = zoneopt ? zoneopt.formvalue('_new_') : null;
 			const enc = L.isObject(bss.encryption) ? bss.encryption : null;
 			const is_wep = (enc && Array.isArray(enc.wep));
-			const is_psk = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).filter(function(a) { return a == 'psk'; }).length > 0);
-			const is_sae = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).filter(function(a) { return a == 'sae'; }).length > 0);
+			const is_psk = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a == 'psk'));
+			const is_sae = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a == 'sae'));
 
 			if (nameval == null || (passopt && passval == null))
 				return;
@@ -2218,7 +2218,7 @@ return view.extend({
 			const s2 = m2.section(form.NamedSection, '_new_');
 			const enc = L.isObject(bss.encryption) ? bss.encryption : null;
 			const is_wep = (enc && Array.isArray(enc.wep));
-			const is_psk = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).filter(function(a) { return a == 'psk' || a == 'sae'; }));
+			const is_psk = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a == 'psk' || a == 'sae'));
 			let replace, passphrase, name, bssid, zone;
 
 			function nameUsed(name) {
